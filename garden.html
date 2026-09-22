@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微光花園 · 分享一件快樂的事 | Warm Muted Garden</title>
+
+    <!-- Google Fonts: Playfair Display, Outfit & Noto Serif TC for elegant, calming typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        warm: {
+                            bg: '#F9F6F0',
+                            card: '#FFFDF9',
+                            sand: '#EFEAE1',
+                            border: '#E2D9CC',
+                            terracotta: '#C87D60',
+                            terracottaSoft: '#DB9B82',
+                            dustyRose: '#D4A396',
+                            roseSoft: '#E8C5BC',
+                            sage: '#8A9A86',
+                            sageSoft: '#B4C2B1',
+                            mustard: '#CFA15A',
+                            text: '#4A4238',
+                            muted: '#8C8275'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif TC', 'Playfair Display', 'serif'],
+                        sans: ['Outfit', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'soft-warm': '0 10px 30px -10px rgba(180, 150, 130, 0.15)',
+                        'floating': '0 20px 40px -15px rgba(120, 100, 85, 0.12)',
+                        'inner-warm': 'inset 0 2px 6px rgba(180, 160, 140, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F9F6F0;
+            color: #4A4238;
+            font-family: 'Outfit', 'Noto Serif TC', serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(212, 163, 150, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(138, 154, 134, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+        }
+
+        /* SVG Stem Draw Animation */
+        .stem-path {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            animation: drawStem 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes drawStem {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Leaves Unfold Animation */
+        .leaf-element {
+            transform: scale(0);
+            transform-origin: center;
+            animation: unfoldLeaf 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes unfoldLeaf {
+            to { transform: scale(1); }
+        }
+
+        /* Flower Bloom Head Animation */
+        .flower-head {
+            transform: scale(0) rotate(-15deg);
+            transform-origin: 50px 50px;
+            animation: bloomFlower 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes bloomFlower {
+            to { transform: scale(1) rotate(0deg); }
+        }
+
+        /* Gentle Swaying in Breeze */
+        @keyframes swaySlow {
+            0%, 100% { transform: rotate(-1.5deg); }
+            50% { transform: rotate(1.5deg); }
+        }
+        @keyframes swayMedium {
+            0%, 100% { transform: rotate(-2.5deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .sway-1 { animation: swaySlow 5s ease-in-out infinite; transform-origin: bottom center; }
+        .sway-2 { animation: swayMedium 6s ease-in-out infinite 0.7s; transform-origin: bottom center; }
+        .sway-3 { animation: swaySlow 5.5s ease-in-out infinite 1.4s; transform-origin: bottom center; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #E2D9CC; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C87D60; }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-warm-roseSoft selection:text-warm-text">
+
+    <!-- Top Navigation Header -->
+    <header class="relative z-20 w-full max-w-5xl mx-auto px-6 pt-8 pb-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full bg-warm-sand border border-warm-border flex items-center justify-center text-warm-terracotta">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </div>
+            <div>
+                <h1 class="font-serif text-xl sm:text-2xl font-normal tracking-wide text-warm-text">微光花園</h1>
+                <p class="text-xs text-warm-muted tracking-wider font-light uppercase">Soft Warmth & Joy Garden</p>
+            </div>
+        </div>
+
+        <!-- Utility Buttons -->
+        <div class="flex items-center space-x-3">
+            <!-- Audio Ambient Toggle -->
+            <button id="audio-toggle-btn" onclick="toggleAudio()" class="p-2.5 rounded-full bg-warm-card border border-warm-border text-warm-muted hover:text-warm-terracotta hover:border-warm-terracottaSoft transition-all shadow-sm" title="聲音回饋開關">
+                <svg id="audio-on-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                </svg>
+                <svg id="audio-off-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+                </svg>
+            </button>
+
+            <!-- Memory List Drawer Toggle Button -->
+            <button onclick="toggleDrawer()" class="px-4 py-2 rounded-full bg-warm-card border border-warm-border text-xs text-warm-text font-medium hover:border-warm-terracottaSoft transition-all shadow-sm flex items-center space-x-2">
+                <svg class="w-4 h-4 text-warm-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                <span>快樂集錦 (<span id="count-badge">0</span>)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="relative z-10 flex-grow max-w-4xl w-full mx-auto px-4 flex flex-col justify-start items-center">
+        
+        <!-- Hero Introduction -->
+        <div class="text-center my-6 max-w-xl">
+            <span class="text-xs tracking-widest text-warm-terracotta uppercase font-medium bg-warm-sand/80 px-3 py-1 rounded-full border border-warm-border/60">Tranquil Garden Space</span>
+            <h2 class="font-serif text-2xl sm:text-3xl text-warm-text mt-3 font-normal leading-relaxed">
+                分享一件讓你感到高興的事...
+            </h2>
+            <p class="text-xs sm:text-sm text-warm-muted mt-2 font-light">
+                每一份輕柔的喜悅，都會在這裡化為獨一無二綻放的花朵。
+            </p>
+        </div>
+
+        <!-- Input Box Section -->
+        <div class="w-full max-w-2xl bg-warm-card border border-warm-border rounded-3xl p-5 sm:p-7 shadow-soft-warm relative transition-all focus-within:shadow-floating">
+            <form id="plant-form" onsubmit="handlePlantSubmit(event)" class="space-y-4">
+                <div class="relative">
+                    <textarea 
+                        id="happy-input" 
+                        rows="2" 
+                        required
+                        placeholder="寫下今天遇見的小幸運、溫暖的對話或讓你微笑的瞬間..." 
+                        class="w-full bg-warm-bg/70 border border-warm-border/80 rounded-2xl p-4 text-warm-text font-serif placeholder-warm-muted/70 text-sm sm:text-base focus:outline-none focus:border-warm-terracottaSoft focus:bg-warm-card transition-all resize-none leading-relaxed"
+                        onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handlePlantSubmit(event); }"
+                    ></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+                    <!-- Palette Picker for Flower Theme -->
+                    <div class="flex items-center space-x-2.5 w-full sm:w-auto">
+                        <span class="text-xs text-warm-muted font-light">色彩意象：</span>
+                        <div class="flex space-x-2" id="palette-picker">
+                            <button type="button" data-theme="terracotta" class="theme-btn w-6 h-6 rounded-full bg-warm-terracotta border-2 border-white ring-2 ring-warm-terracotta/50 transition-all"></button>
+                            <button type="button" data-theme="dustyRose" class="theme-btn w-6 h-6 rounded-full bg-warm-dustyRose border-2 border-white transition-all"></button>
+                            <button type="button" data-theme="sage" class="theme-btn w-6 h-6 rounded-full bg-warm-sage border-2 border-white transition-all"></button>
+                            <button type="button" data-theme="mustard" class="theme-btn w-6 h-6 rounded-full bg-warm-mustard border-2 border-white transition-all"></button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        class="w-full sm:w-auto bg-warm-terracotta hover:bg-warm-terracottaSoft text-white font-serif text-xs sm:text-sm px-6 py-3 rounded-full transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center space-x-2 group"
+                    >
+                        <span>種下一朵花</span>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Garden Bed Container -->
+        <div class="w-full mt-8 relative flex-grow flex flex-col">
+            <!-- Soil / Bed Header Indicator -->
+            <div class="flex justify-between items-center mb-3 px-2">
+                <span class="text-xs text-warm-muted font-light flex items-center space-x-1">
+                    <span class="w-2 h-2 rounded-full bg-warm-sage inline-block"></span>
+                    <span>微光花床 (輕點花朵閱讀心情)</span>
+                </span>
+                
+                <button onclick="clearGardenConfirm()" class="text-xs text-warm-muted/70 hover:text-warm-terracotta transition-colors font-light">
+                    重置花園
+                </button>
+            </div>
+
+            <!-- Digital Garden Canvas Container -->
+            <div id="garden-bed" class="w-full min-h-[380px] sm:min-h-[440px] bg-gradient-to-b from-warm-sand/30 via-warm-sand/60 to-warm-sand/90 border border-warm-border/80 rounded-3xl p-6 sm:p-10 shadow-inner-warm relative overflow-hidden flex flex-wrap items-end justify-center gap-6 sm:gap-12 align-bottom">
+                <!-- Ground Grass Base Line -->
+                <div class="absolute bottom-0 inset-x-0 h-4 bg-warm-border/40 rounded-b-3xl pointer-events-none"></div>
+
+                <!-- Dynamic SVG Flowers render here -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Detail Flower Card Modal -->
+    <div id="flower-modal" class="fixed inset-0 z-50 bg-warm-text/20 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="flower-card-content" class="bg-warm-card border border-warm-border rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-floating transform scale-95 transition-transform duration-300 relative">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-warm-muted hover:text-warm-text transition-colors p-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <div class="text-center my-2">
+                <div id="modal-flower-preview" class="w-20 h-20 mx-auto mb-3"></div>
+                <span id="modal-date" class="text-xs text-warm-muted tracking-widest font-light uppercase"></span>
+            </div>
+
+            <div class="bg-warm-bg/80 border border-warm-border/60 rounded-2xl p-5 my-4">
+                <p id="modal-message" class="font-serif text-warm-text text-base sm:text-lg leading-relaxed text-center font-normal break-words">
+                    ...
+                </p>
+            </div>
+
+            <div class="flex justify-center mt-6">
+                <button onclick="closeModal()" class="bg-warm-sand hover:bg-warm-border text-warm-text font-serif text-xs px-6 py-2.5 rounded-full transition-colors">
+                    關閉頁面
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-Out Memory Collection Drawer -->
+    <div id="drawer-overlay" onclick="toggleDrawer()" class="fixed inset-0 z-40 bg-warm-text/20 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0"></div>
+    <div id="memory-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-warm-card border-l border-warm-border shadow-floating transform translate-x-full transition-transform duration-300 p-6 flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between pb-4 border-b border-warm-border/60">
+                <h3 class="font-serif text-lg text-warm-text font-normal">微光記憶集錦</h3>
+                <button onclick="toggleDrawer()" class="text-warm-muted hover:text-warm-text p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="drawer-list" class="mt-4 space-y-3 overflow-y-auto max-h-[72vh] pr-1">
+                <!-- Memory list dynamic items -->
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-warm-border/60 text-center">
+            <p class="text-xs text-warm-muted font-light">微光花園 · 一粒微小的善意，也是美好的盛開</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-6 text-center text-xs text-warm-muted font-light">
+        <p>Muted Warm Garden &copy; 2026 · Simple & Intricate Digital Bloom Experience</p>
+    </footer>
+
+    <script>
+        // State Variables
+        let gardenFlowers = [];
+        let selectedTheme = 'terracotta';
+        let isAudioEnabled = true;
+
+        // Low Saturation Color Palette Configurations
+        const themePalettes = {
+            terracotta: {
+                petal1: '#C87D60',
+                petal2: '#DB9B82',
+                center: '#E2B897',
+                stem: '#8A9A86'
+            },
+            dustyRose: {
+                petal1: '#D4A396',
+                petal2: '#E8C5BC',
+                center: '#F3D2C2',
+                stem: '#8A9A86'
+            },
+            sage: {
+                petal1: '#8A9A86',
+                petal2: '#B4C2B1',
+                center: '#EFEAE1',
+                stem: '#6E7E6A'
+            },
+            mustard: {
+                petal1: '#CFA15A',
+                petal2: '#E6C48B',
+                center: '#F7E7C4',
+                stem: '#8A9A86'
+            }
+        };
+
+        // Default Pre-populated Messages
+        const defaultFlowers = [
+            {
+                id: 'df-1',
+                message: '午後陽光穿過窗簾，落在剛剛泡好的熱茶上，心情無比平靜。',
+                theme: 'terracotta',
+                flowerType: 0,
+                date: '2026.09.22'
+            },
+            {
+                id: 'df-2',
+                message: '路上遇到了很久沒見的老朋友，相視一笑依然默契十足。',
+                theme: 'sage',
+                flowerType: 1,
+                date: '2026.09.22'
+            },
+            {
+                id: 'df-3',
+                message: '今天提前完成了手頭的工作，獲得了完整的自由傍晚！',
+                theme: 'dustyRose',
+                flowerType: 2,
+                date: '2026.09.22'
+            }
+        ];
+
+        /**
+         * Generates sophisticated, detailed vector SVG flowers
+         */
+        function createFlowerSVG(flower, index) {
+            const palette = themePalettes[flower.theme] || themePalettes.terracotta;
+            const stemHeight = 150 + (index % 3) * 25;
+            const swayClass = ['sway-1', 'sway-2', 'sway-3'][index % 3];
+            const type = flower.flowerType % 3;
+
+            let flowerHeadContent = '';
+
+            // Flower Type 0: Refined Anemone / Multi-layer Petal Bloom
+            if (type === 0) {
+                const petalCount = 8;
+                let petals = '';
+                for (let i = 0; i < petalCount; i++) {
+                    const angle = (360 / petalCount) * i;
+                    petals += `
+                        <path d="M50 50 C35 20, 40 5, 50 5 C60 5, 65 20, 50 50 Z" 
+                              fill="${i % 2 === 0 ? palette.petal1 : palette.petal2}" 
+                              opacity="0.9"
+                              transform="rotate(${angle} 50 50)" />
+                        <!-- Delicate Petal Vein -->
+                        <path d="M50 50 C48 30, 50 15, 50 10" 
+                              stroke="${palette.petal1}" stroke-width="0.8" opacity="0.4"
+                              transform="rotate(${angle} 50 50)" fill="none" />
+                    `;
+                }
+                flowerHeadContent = `
+                    <g class="flower-head">
+                        ${petals}
+                        <!-- Detailed Stamen Core -->
+                        <circle cx="50" cy="50" r="10" fill="${palette.center}" />
+                        ${Array.from({length: 12}).map((_, i) => {
+                            const a = (360 / 12) * i;
+                            const rad = (a * Math.PI) / 180;
+                            const x2 = 50 + Math.cos(rad) * 14;
+                            const y2 = 50 + Math.sin(rad) * 14;
+                            return `
+                                <line x1="50" y1="50" x2="${x2}" y2="${y2}" stroke="${palette.petal1}" stroke-width="1" opacity="0.6"/>
+                                <circle cx="${x2}" cy="${y2}" r="1.5" fill="${palette.petal1}" />
+                            `;
+                        }).join('')}
+                    </g>
+                `;
+            } 
+            // Flower Type 1: Delicate Layered Cosmos / Daisy
+            else if (type === 1) {
+                const petalCount = 12;
+                let petals = '';
+                for (let i = 0; i < petalCount; i++) {
+                    const angle = (360 / petalCount) * i;
+                    petals += `
+                        <path d="M50 50 C42 25, 45 10, 50 10 C55 10, 58 25, 50 50 Z" 
+                              fill="${palette.petal1}" 
+                              opacity="0.85"
+                              transform="rotate(${angle} 50 50)" />
+                    `;
+                }
+                flowerHeadContent = `
+                    <g class="flower-head">
+                        ${petals}
+                        <!-- Soft Center Circle with Stipple Dot Effect -->
+                        <circle cx="50" cy="50" r="12" fill="${palette.center}" />
+                        <circle cx="50" cy="50" r="7" fill="${palette.petal1}" opacity="0.2" />
+                        <circle cx="47" cy="47" r="2" fill="#FFF" opacity="0.5" />
+                    </g>
+                `;
+            } 
+            // Flower Type 2: Soft Bell Tulip / Gentle Curved Bloom
+            else {
+                flowerHeadContent = `
+                    <g class="flower-head">
+                        <!-- Outer Soft Back Petals -->
+                        <path d="M30 45 C20 20, 35 10, 50 25 C65 10, 80 20, 70 45 C60 60, 40 60, 30 45 Z" fill="${palette.petal2}" opacity="0.8"/>
+                        <!-- Main Front Curved Petals -->
+                        <path d="M35 50 C25 25, 45 15, 50 30 C55 15, 75 25, 65 50 C55 62, 45 62, 35 50 Z" fill="${palette.petal1}"/>
+                        <path d="M42 52 C38 35, 48 25, 50 32 C52 25, 62 35, 58 52 Z" fill="${palette.center}" opacity="0.7"/>
+                    </g>
+                `;
+            }
+
+            return `
+                <div onclick="openFlowerModal('${flower.id}')" class="${swayClass} cursor-pointer group relative flex flex-col items-center justify-end transition-transform hover:scale-105" style="height: ${stemHeight + 70}px; width: 100px;">
+                    <svg viewBox="0 0 100 ${stemHeight + 70}" class="w-full h-full overflow-visible">
+                        <!-- Elegant Curved Stem -->
+                        <path class="stem-path" d="M50,${stemHeight + 60} Q${42 + (index % 2) * 16},${stemHeight / 2 + 30} 50,50" 
+                              fill="none" stroke="${palette.stem}" stroke-width="2.5" stroke-linecap="round"/>
+                        
+                        <!-- Left Leaf -->
+                        <g class="leaf-element" style="animation-delay: 0.5s;">
+                            <path d="M50,${stemHeight + 10} Q32,${stemHeight - 10} 25,${stemHeight - 25} Q42,${stemHeight - 18} 50,${stemHeight + 10}" 
+                                  fill="${palette.stem}" opacity="0.85"/>
+                        </g>
+
+                        <!-- Right Leaf -->
+                        <g class="leaf-element" style="animation-delay: 0.7s;">
+                            <path d="M50,${stemHeight - 20} Q68,${stemHeight - 38} 75,${stemHeight - 52} Q58,${stemHeight - 42} 50,${stemHeight - 20}" 
+                                  fill="${palette.stem}" opacity="0.85"/>
+                        </g>
+
+                        <!-- Flower Head -->
+                        ${flowerHeadContent}
+                    </svg>
+
+                    <!-- Hover Speech Bubble Preview Card -->
+                    <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-warm-card border border-warm-border text-warm-text font-serif text-xs px-3 py-1.5 rounded-full shadow-soft-warm opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap z-30">
+                        ${flower.message.length > 14 ? flower.message.substring(0, 14) + '...' : flower.message}
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Ambient Pentatonic Web Audio Synthesizer
+         */
+        function playBloomChime() {
+            if (!isAudioEnabled) return;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioContext();
+
+                // Warm Pentatonic Scale frequencies (E4, G#4, B4, C#5, E5)
+                const freqs = [329.63, 415.30, 493.88, 554.37, 659.25];
+                freqs.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.1);
+
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.1 + 1.2);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(ctx.currentTime + idx * 0.1);
+                    osc.stop(ctx.currentTime + idx * 0.1 + 1.2);
+                });
+            } catch (e) {
+                console.log("Audio play blocked by browser policy");
+            }
+        }
+
+        function toggleAudio() {
+            isAudioEnabled = !isAudioEnabled;
+            document.getElementById('audio-on-icon').classList.toggle('hidden', !isAudioEnabled);
+            document.getElementById('audio-off-icon').classList.toggle('hidden', isAudioEnabled);
+        }
+
+        function renderGarden() {
+            const bed = document.getElementById('garden-bed');
+            const countBadge = document.getElementById('count-badge');
+            
+            bed.innerHTML = '<div class="absolute bottom-0 inset-x-0 h-4 bg-warm-border/40 rounded-b-3xl pointer-events-none"></div>';
+            countBadge.textContent = gardenFlowers.length;
+
+            gardenFlowers.forEach((flower, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = createFlowerSVG(flower, index);
+                bed.appendChild(wrapper.firstElementChild);
+            });
+
+            renderDrawerList();
+        }
+
+        function handlePlantSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('happy-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const newFlower = {
+                id: 'flower-' + Date.now(),
+                message: text,
+                theme: selectedTheme,
+                flowerType: Math.floor(Math.random() * 3),
+                date: new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')
+            };
+
+            gardenFlowers.push(newFlower);
+            saveToStorage();
+            renderGarden();
+            playBloomChime();
+
+            input.value = '';
+            
+            // Smooth scroll down to garden bed
+            document.getElementById('garden-bed').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function openFlowerModal(id) {
+            const flower = gardenFlowers.find(f => f.id === id);
+            if (!flower) return;
+
+            const modal = document.getElementById('flower-modal');
+            const card = document.getElementById('flower-card-content');
+            
+            document.getElementById('modal-message').textContent = flower.message;
+            document.getElementById('modal-date').textContent = flower.date || '2026.09.22';
+
+            // Generate miniature SVG preview
+            document.getElementById('modal-flower-preview').innerHTML = createFlowerSVG(flower, 0);
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('flower-modal');
+            const card = document.getElementById('flower-card-content');
+            
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('memory-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            } else {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            }
+        }
+
+        function renderDrawerList() {
+            const list = document.getElementById('drawer-list');
+            list.innerHTML = '';
+
+            if (gardenFlowers.length === 0) {
+                list.innerHTML = '<p class="text-xs text-warm-muted text-center py-8">花園裡目前還沒有花朵，寫下一件高興的事吧！</p>';
+                return;
+            }
+
+            gardenFlowers.slice().reverse().forEach(flower => {
+                const palette = themePalettes[flower.theme] || themePalettes.terracotta;
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl bg-warm-bg/70 border border-warm-border/60 hover:border-warm-terracottaSoft transition-all cursor-pointer flex items-start space-x-3';
+                item.onclick = () => {
+                    toggleDrawer();
+                    openFlowerModal(flower.id);
+                };
+
+                item.innerHTML = `
+                    <span class="w-3 h-3 rounded-full mt-1.5 flex-shrink-0" style="background-color: ${palette.petal1}"></span>
+                    <div class="flex-grow">
+                        <p class="font-serif text-sm text-warm-text line-clamp-2">${flower.message}</p>
+                        <span class="text-[10px] text-warm-muted mt-1 inline-block">${flower.date}</span>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function clearGardenConfirm() {
+            if (confirm("確定要重置並重新種植花園嗎？")) {
+                gardenFlowers = [];
+                saveToStorage();
+                renderGarden();
+            }
+        }
+
+        // Theme palette button handlers
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.theme-btn').forEach(b => {
+                    b.classList.remove('ring-2', 'ring-warm-terracotta/50');
+                });
+                const target = e.currentTarget;
+                target.classList.add('ring-2', 'ring-warm-terracotta/50');
+                selectedTheme = target.dataset.theme;
+            });
+        });
+
+        // LocalStorage Helpers
+        function saveToStorage() {
+            localStorage.setItem('warm_garden_memories', JSON.stringify(gardenFlowers));
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('warm_garden_memories');
+            if (saved) {
+                try {
+                    gardenFlowers = JSON.parse(saved);
+                } catch (e) {
+                    gardenFlowers = defaultFlowers;
+                }
+            } else {
+                gardenFlowers = defaultFlowers;
+            }
+        }
+
+        // Initialize Window
+        window.onload = function () {
+            loadFromStorage();
+            renderGarden();
+
+            // Modal overlay click close
+            document.getElementById('flower-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'flower-modal') closeModal();
+            });
+        };
+    </script>
+</body>
+</html>
