@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微光花園 · 共享萬家心光的溫暖花園</title>
+    
+    <!-- 引入優雅襯線體與無襯線體 Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. CSS 全局變數與風格設定 (低飽和暖色調與字體)
+           ========================================================================== */
+        :root {
+            /* 暖色調色彩系統 */
+            --bg-cream: #FDFBF7;           /* 奶油米白背景 */
+            --bg-card: rgba(255, 253, 249, 0.88); /* 磨砂玻璃卡片 */
+            --border-warm: #EADFD3;        /* 邊框淡杏色 */
+            --text-primary: #4A4238;     /* 深咖啡文字 */
+            --text-muted: #8C8275;       /* 柔和次要字體 */
+            
+            /* 低飽和度花朵與植物色彩庫 */
+            --color-terracotta: #D89880;   /* 淺陶土色 */
+            --color-dusty-rose: #DBA99D;   /* 藕粉色 */
+            --color-warm-apricot: #E8C1A0;  /* 暖杏色 */
+            --color-mustard-soft: #D6A868;  /* 莫蘭迪黃 */
+            --color-sage-green: #90A08B;   /* 鼠尾草綠 */
+            --color-stem-dark: #788873;    /* 深綠莖 */
+            --color-sand: #EFEAE2;         /* 沙丘亮色 */
+
+            /* 陰影與圓角 */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            --shadow-soft: 0 10px 30px -8px rgba(180, 160, 140, 0.15);
+            --shadow-floating: 0 20px 40px -12px rgba(130, 110, 95, 0.18);
+
+            /* 字體定義 */
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Outfit', sans-serif;
+        }
+
+        /* 重置基礎樣式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 15%, rgba(216, 152, 128, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, rgba(144, 160, 139, 0.08) 0%, transparent 45%);
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+
+        /* 頁面主要佈局結構 */
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 24px 20px 40px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 頂部標題列 */
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 2.1rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        header p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 300;
+        }
+
+        /* 即時連線狀態標籤 */
+        .online-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(144, 160, 139, 0.15);
+            color: #556B52;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            border: 1px solid rgba(144, 160, 139, 0.3);
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #6B8E65;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(107, 142, 101, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(107, 142, 101, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(107, 142, 101, 0); }
+        }
+
+        /* 表單輸入區域 */
+        .input-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-warm);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .input-card:focus-within {
+            box-shadow: var(--shadow-floating);
+            border-color: var(--color-dusty-rose);
+        }
+
+        .input-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid var(--border-warm);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.7);
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        textarea:focus {
+            background: #FFFFFF;
+            border-color: var(--color-terracotta);
+        }
+
+        textarea::placeholder {
+            color: #B5ACA0;
+            font-family: var(--font-serif);
+        }
+
+        .form-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-counter {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            background: var(--color-terracotta);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 24px;
+            font-family: var(--font-serif);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(216, 152, 128, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .submit-btn:hover {
+            background: #CA8A72;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(216, 152, 128, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 花園展示大區域 */
+        .garden-container {
+            flex-grow: 1;
+            position: relative;
+            background: linear-gradient(180deg, rgba(239, 234, 226, 0.3) 0%, rgba(239, 234, 226, 0.85) 100%);
+            border: 1px solid var(--border-warm);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            min-height: 440px;
+            box-shadow: inset 0 2px 8px rgba(180, 160, 140, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        /* 工具控制列 */
+        .garden-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(234, 223, 211, 0.5);
+            background: rgba(253, 251, 247, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 20;
+        }
+
+        .btn-text-link {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: var(--font-serif);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--border-warm);
+            transition: all 0.2s ease;
+        }
+
+        .btn-text-link:hover {
+            background: #FFFFFF;
+            border-color: var(--color-terracotta);
+            color: var(--color-terracotta);
+        }
+
+        /* 地面裝飾線 */
+        .ground-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(144, 160, 139, 0.22);
+            border-top: 1px dashed var(--color-sage-green);
+        }
+
+        /* SVG 花朵畫布容器 */
+        #garden-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        /* 空花園提示 */
+        .empty-garden-tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-muted);
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .empty-garden-tip p {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        /* 花朵元件結構與動畫效果 */
+        .flower-wrapper {
+            position: absolute;
+            bottom: 10px;
+            transform-origin: bottom center;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        .flower-wrapper:hover {
+            transform: scale(1.12) translateY(-6px);
+            z-index: 50;
+        }
+
+        .flower-wrapper.my-flower::after {
+            content: '我的心事';
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-terracotta);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .flower-wrapper.my-flower:hover::after {
+            opacity: 1;
+        }
+
+        /* 花莖繪製 stroke 動畫 */
+        .stem-path {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            animation: growStem 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes growStem {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* 葉片展開動畫 */
+        .leaf-path {
+            transform: scale(0);
+            transform-origin: center;
+            animation: unfoldLeaf 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes unfoldLeaf {
+            to { transform: scale(1); }
+        }
+
+        /* 花朵綻放 (Scale & Opacity) */
+        .bloom-head {
+            transform: scale(0) rotate(-10deg);
+            transform-origin: center;
+            opacity: 0;
+            animation: bloom 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes bloom {
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* 微風吹拂搖晃動畫 */
+        .sway-slow { animation: sway 6s ease-in-out infinite; }
+        .sway-medium { animation: sway 4.5s ease-in-out infinite 0.5s; }
+        .sway-fast { animation: sway 3.5s ease-in-out infinite 1s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2.5deg); }
+        }
+
+        /* 彈窗浮動卡片 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(74, 66, 56, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .story-card {
+            background: var(--bg-cream);
+            border: 1px solid var(--border-warm);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: var(--shadow-floating);
+            transform: scale(0.9) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-overlay.active .story-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .story-card .date-badge {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+        }
+
+        .story-card .story-content {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin: 20px 0;
+            line-height: 1.7;
+            word-break: break-word;
+        }
+
+        .close-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-warm);
+            color: var(--text-primary);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: var(--border-warm);
+        }
+
+        /* 故事清單側邊抽屜 (Story Drawer) */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(74, 66, 56, 0.2);
+            backdrop-filter: blur(3px);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-content {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-cream);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.08);
+            z-index: 95;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .drawer-overlay.active .drawer-content {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-warm);
+        }
+
+        .drawer-header h2 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .drawer-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 4px;
+        }
+
+        .drawer-item {
+            background: #FFFFFF;
+            border: 1px solid var(--border-warm);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .drawer-item:hover {
+            border-color: var(--color-terracotta);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .drawer-item .item-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .drawer-item .item-text {
+            font-family: var(--font-serif);
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.7rem; }
+            .app-container { padding: 16px 12px; }
+            .input-card { padding: 16px; }
+            .garden-container { min-height: 380px; }
+            .drawer-content { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- 頁面標頭區域 -->
+        <header>
+            <h1>微光花園</h1>
+            <p>分享一件讓你微笑的小事，讓萬家心光在雲端綻放成溫暖花海</p>
+            <div class="online-badge">
+                <div class="pulse-dot"></div>
+                <span id="sync-status">雲端即時同步中</span>
+            </div>
+        </header>
+
+        <!-- 輸入喜悅與提交區域 -->
+        <main class="input-card">
+            <form id="happy-form" class="input-form">
+                <textarea 
+                    id="happy-input" 
+                    maxlength="200" 
+                    placeholder="寫下今天遇見的幸運、溫暖的對話或讓你開心的事情..." 
+                    required
+                ></textarea>
+                <div class="form-action">
+                    <span id="char-count" class="char-counter">0 / 200 字</span>
+                    <button type="submit" id="submit-btn" class="submit-btn">
+                        <span>種下花朵</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- 花園容器區 -->
+        <div class="garden-container">
+            <div class="garden-header-bar">
+                <span id="flower-count-text">正在載入雲端花園...</span>
+                <button id="open-drawer-btn" class="btn-text-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <span>檢視所有故事</span>
+                </button>
+            </div>
+
+            <div id="garden-stage">
+                <!-- 空花園提示 -->
+                <div id="empty-tip" class="empty-garden-tip">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="margin: 0 auto; stroke: var(--text-muted);">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 15v6M9 18h6M12 9V3M9 6h6"/>
+                    </svg>
+                    <p>花園靜待著第一份溫暖的喜悅...</p>
+                </div>
+            </div>
+
+            <!-- 地面標示 -->
+            <div class="ground-line"></div>
+        </div>
+    </div>
+
+    <!-- 點擊花朵彈出的故事卡片 Modal -->
+    <div id="story-modal" class="modal-overlay">
+        <div class="story-card">
+            <div id="modal-date" class="date-badge">2026.09.23</div>
+            <div id="modal-content" class="story-content">...</div>
+            <button id="modal-close" class="close-btn">關閉頁面</button>
+        </div>
+    </div>
+
+    <!-- 所有故事清單側邊抽屜 -->
+    <div id="story-drawer" class="drawer-overlay">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2>眾人的微光心事</h2>
+                <button id="drawer-close" class="close-btn" style="padding: 4px 12px;">✕</button>
+            </div>
+            <div id="drawer-list" class="drawer-list">
+                <!-- 動態注入心事卡片列表 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase JS SDK Imports (Modular v11) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ==========================================================================
+        // 2. FIREBASE 軟體配置與環境變數準備 (依照規範嚴格設定)
+        // ==========================================================================
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'muted-warm-garden-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyDemoPlaceholderOnly",
+                authDomain: "demo.firebaseapp.com",
+                projectId: "demo-project",
+                storageBucket: "demo.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:demo"
+            };
+
+        // 初始化 Firebase App 與 Service
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 低飽和度色彩選擇盤
+        const PALETTES = [
+            { petal: '#D89880', petalSoft: '#E8BBAA', center: '#F2D3C1', stem: '#90A08B' }, // 淺陶土
+            { petal: '#DBA99D', petalSoft: '#EAD0C8', center: '#FAF0E6', stem: '#859680' }, // 藕粉
+            { petal: '#E8C1A0', petalSoft: '#F3DAC6', center: '#FFF5EA', stem: '#90A08B' }, // 暖杏
+            { petal: '#D6A868', petalSoft: '#E8C99B', center: '#F9EED9', stem: '#7E8F79' }, // 莫蘭迪黃
+            { petal: '#B8A0B2', petalSoft: '#D4C4D0', center: '#F4EEF2', stem: '#859680' }  // 鼠尾草紫
+        ];
+
+        let currentUser = null;
+        let gardenFlowers = []; // 即時獲取的所有雲端故事
+
+        // 驗證流程初始化 (Rule 3 Guard Check)
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.warn("Auth initialization fallback to anonymous: ", err);
+                await signInAnonymously(auth);
+            }
+        }
+
+        // 啟動身份監控與 Firestore 即時資料監聽 (Rule 1: 公共路徑 /artifacts/{appId}/public/data/memories)
+        onAuthStateChanged(auth, (user) => {
+            if (!user) return;
+            currentUser = user;
+            document.getElementById('sync-status').textContent = '已連線雲端花園';
+
+            // 即時同步雲端花朵資料庫
+            const publicMemoriesRef = collection(db, 'artifacts', appId, 'public', 'data', 'memories');
+            
+            // 使用無條件簡單 collection 查詢 (Rule 2)
+            onSnapshot(publicMemoriesRef, (snapshot) => {
+                const fetchedList = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    fetchedList.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+
+                // 在記憶體中按時間排序 (符合 Rule 2：Avoid complex Firestore queries)
+                fetchedList.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+
+                gardenFlowers = fetchedList;
+                renderGarden();
+                renderDrawerList();
+            }, (error) => {
+                console.error("Firestore 即時監聽錯誤：", error);
+                document.getElementById('sync-status').textContent = '連線微幅延遲中';
+            });
+        });
+
+        // 執行身份認證
+        initAuth();
+
+        // UI DOM 元素與事件監聽
+        const happyForm = document.getElementById('happy-form');
+        const happyInput = document.getElementById('happy-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const charCount = document.getElementById('char-count');
+        const modalClose = document.getElementById('modal-close');
+        const modalOverlay = document.getElementById('story-modal');
+        const openDrawerBtn = document.getElementById('open-drawer-btn');
+        const drawerClose = document.getElementById('drawer-close');
+        const drawerOverlay = document.getElementById('story-drawer');
+
+        happyInput.addEventListener('input', (e) => {
+            charCount.textContent = `${e.target.value.length} / 200 字`;
+        });
+
+        // 提交開心故事至 Firebase Firestore
+        happyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = happyInput.value.trim();
+            if (!text || !currentUser) return;
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').textContent = '正在綻放...';
+
+            try {
+                const dateStr = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.');
+                const flowerType = Math.floor(Math.random() * 5);
+                const paletteIdx = Math.floor(Math.random() * PALETTES.length);
+                const height = 180 + Math.random() * 120;
+                const swayClass = ['sway-slow', 'sway-medium', 'sway-fast'][Math.floor(Math.random() * 3)];
+
+                // 寫入雲端 Firestore (Rule 1 Path)
+                const publicMemoriesRef = collection(db, 'artifacts', appId, 'public', 'data', 'memories');
+                await addDoc(publicMemoriesRef, {
+                    text: text,
+                    date: dateStr,
+                    userId: currentUser.uid,
+                    flowerType: flowerType,
+                    paletteIdx: paletteIdx,
+                    height: height,
+                    swayClass: swayClass,
+                    createdAt: serverTimestamp()
+                });
+
+                happyInput.value = '';
+                charCount.textContent = '0 / 200 字';
+            } catch (err) {
+                console.error("寫入雲端花朵失敗：", err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').textContent = '種下花朵';
+            }
+        });
+
+        // 彈窗與抽屜卡片事件
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+        openDrawerBtn.addEventListener('click', () => drawerOverlay.classList.add('active'));
+        drawerClose.addEventListener('click', () => drawerOverlay.classList.remove('active'));
+        drawerOverlay.addEventListener('click', (e) => { if (e.target === drawerOverlay) drawerOverlay.classList.remove('active'); });
+
+        /**
+         * 渲染整座花園
+         */
+        function renderGarden() {
+            const stage = document.getElementById('garden-stage');
+            const emptyTip = document.getElementById('empty-tip');
+            const countText = document.getElementById('flower-count-text');
+
+            // 移除舊有花朵元素
+            const oldFlowers = stage.querySelectorAll('.flower-wrapper');
+            oldFlowers.forEach(el => el.remove());
+
+            if (gardenFlowers.length === 0) {
+                emptyTip.style.opacity = '1';
+                countText.textContent = '目前花園靜待著第一朵綻放的花';
+                return;
+            }
+
+            emptyTip.style.opacity = '0';
+            countText.textContent = `目前花園共有 ${gardenFlowers.length} 朵為愛綻放的花`;
+
+            const stageWidth = stage.clientWidth || 800;
+            const existingXs = [];
+
+            // 依據列表計算各自的座標並渲染
+            gardenFlowers.forEach((flower, index) => {
+                // 使用偽隨機算式結合 ID 與索引，保證多端刷新時同一朵花位置保持和諧穩定
+                const x = calculateDeterministicX(flower.id, index, stageWidth, existingXs);
+                existingXs.push(x);
+
+                const flowerEl = createFlowerElement(flower, x);
+                stage.appendChild(flowerEl);
+            });
+        }
+
+        /**
+         * 為每一朵花計算穩定且均勻分佈的 X 軸位置
+         */
+        function calculateDeterministicX(id, index, stageWidth, existingXs) {
+            const padding = 35;
+            const usableWidth = Math.max(stageWidth - padding * 2, 200);
+
+            // 簡單哈希計算
+            let hash = 0;
+            for (let i = 0; i < id.length; i++) {
+                hash = (hash << 5) - hash + id.charCodeAt(i);
+                hash |= 0;
+            }
+            const normHash = Math.abs(hash % 1000) / 1000;
+
+            let candidateX = padding + (normHash * usableWidth);
+
+            // 如果與先前花朵太近，做微幅平移 offset
+            const minDistance = 45;
+            for (let existing of existingXs) {
+                if (Math.abs(existing - candidateX) < minDistance) {
+                    candidateX = (candidateX + minDistance + (normHash * 30)) % usableWidth + padding;
+                }
+            }
+
+            return candidateX;
+        }
+
+        /**
+         * 創建 SVG 花朵 DOM 節點
+         */
+        function createFlowerElement(flower, xPos) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flower-wrapper ${flower.swayClass || 'sway-slow'}`;
+            if (currentUser && flower.userId === currentUser.uid) {
+                wrapper.classList.add('my-flower');
+            }
+            wrapper.style.left = `${xPos}px`;
+            wrapper.style.bottom = '10px';
+
+            const svgWidth = 100;
+            const svgHeight = flower.height || 220;
+            const p = PALETTES[flower.paletteIdx % PALETTES.length] || PALETTES[0];
+            const flowerType = flower.flowerType || 0;
+
+            let flowerHeadSVG = '';
+
+            // 款式 0: 簡約鬱金香
+            if (flowerType === 0) {
+                flowerHeadSVG = `
+                    <g class="bloom-head" style="animation-delay: 0.8s;">
+                        <path d="M50 45 C30 20, 25 -5, 50 15 C75 -5, 70 20, 50 45 Z" fill="${p.petalSoft}"/>
+                        <path d="M38 45 C25 25, 30 5, 50 25 C70 5, 75 25, 62 45 Z" fill="${p.petal}"/>
+                        <path d="M44 48 C38 32, 45 18, 50 28 C55 18, 62 32, 56 48 Z" fill="${p.center}"/>
+                    </g>`;
+            } 
+            // 款式 1: 雛菊
+            else if (flowerType === 1) {
+                let petals = '';
+                const numPetals = 10;
+                for (let i = 0; i < numPetals; i++) {
+                    const angle = (360 / numPetals) * i;
+                    petals += `<path d="M50 25 C44 10, 46 0, 50 0 C54 0, 56 10, 50 25 Z" fill="${p.petalSoft}" transform="rotate(${angle} 50 25)"/>`;
+                }
+                flowerHeadSVG = `
+                    <g class="bloom-head" style="animation-delay: 0.8s;">
+                        ${petals}
+                        <circle cx="50" cy="25" r="7" fill="${p.center}"/>
+                        <circle cx="50" cy="25" r="4" fill="${p.petal}" opacity="0.3"/>
+                    </g>`;
+            } 
+            // 款式 2: 野玫瑰
+            else if (flowerType === 2) {
+                let petals = '';
+                const numPetals = 5;
+                for (let i = 0; i < numPetals; i++) {
+                    const angle = (360 / numPetals) * i;
+                    petals += `<path d="M50 30 C30 10, 40 -10, 50 5 C60 -10, 70 10, 50 30 Z" fill="${p.petal}" opacity="0.9" transform="rotate(${angle} 50 30)"/>`;
+                }
+                flowerHeadSVG = `
+                    <g class="bloom-head" style="animation-delay: 0.8s;">
+                        ${petals}
+                        <circle cx="50" cy="30" r="6" fill="${p.center}"/>
+                        <circle cx="50" cy="30" r="2.5" fill="${p.stem}"/>
+                    </g>`;
+            } 
+            // 款式 3: 風鈴草
+            else if (flowerType === 3) {
+                flowerHeadSVG = `
+                    <g class="bloom-head" style="animation-delay: 0.8s;">
+                        <path d="M50 10 C30 20, 25 45, 38 50 C44 52, 48 42, 50 42 C52 42, 56 52, 62 50 C75 45, 70 20, 50 10 Z" fill="${p.petal}"/>
+                        <path d="M42 48 C46 54, 54 54, 58 48" stroke="${p.center}" stroke-width="2" fill="none"/>
+                    </g>`;
+            } 
+            // 款式 4: 向日葵
+            else {
+                let petals = '';
+                const numPetals = 12;
+                for (let i = 0; i < numPetals; i++) {
+                    const angle = (360 / numPetals) * i;
+                    petals += `<path d="M50 28 C45 12, 48 2, 50 2 C52 2, 55 12, 50 28 Z" fill="${p.petal}" transform="rotate(${angle} 50 28)"/>`;
+                }
+                flowerHeadSVG = `
+                    <g class="bloom-head" style="animation-delay: 0.8s;">
+                        ${petals}
+                        <circle cx="50" cy="28" r="9" fill="${p.stem}"/>
+                        <circle cx="50" cy="28" r="7" fill="#605244"/>
+                    </g>`;
+            }
+
+            wrapper.innerHTML = `
+                <svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 100 ${svgHeight}" style="overflow: visible;">
+                    <path class="stem-path" 
+                          d="M50,${svgHeight} Q${45 + (flowerType % 2) * 10},${svgHeight / 2} 50,30" 
+                          fill="none" 
+                          stroke="${p.stem}" 
+                          stroke-width="2.5" 
+                          stroke-linecap="round"/>
+
+                    <g class="leaf-path" style="animation-delay: 0.5s;">
+                        <path d="M50,${svgHeight - 40} Q30,${svgHeight - 60} 25,${svgHeight - 75} Q42,${svgHeight - 65} 50,${svgHeight - 40}" 
+                              fill="${p.stem}" opacity="0.85"/>
+                    </g>
+
+                    <g class="leaf-path" style="animation-delay: 0.7s;">
+                        <path d="M50,${svgHeight - 80} Q70,${svgHeight - 100} 75,${svgHeight - 115} Q58,${svgHeight - 105} 50,${svgHeight - 80}" 
+                              fill="${p.stem}" opacity="0.85"/>
+                    </g>
+
+                    ${flowerHeadSVG}
+                </svg>
+            `;
+
+            wrapper.addEventListener('click', () => {
+                openModal(flower.date || '微光時刻', flower.text);
+            });
+
+            return wrapper;
+        }
+
+        /**
+         * 渲染側邊故事列表
+         */
+        function renderDrawerList() {
+            const drawerList = document.getElementById('drawer-list');
+            drawerList.innerHTML = '';
+
+            if (gardenFlowers.length === 0) {
+                drawerList.innerHTML = '<div style="text-align:center; color: var(--text-muted); margin-top: 40px;">尚未有故事紀錄</div>';
+                return;
+            }
+
+            // 反轉使最新的心事顯示在最上面
+            const reversedList = [...gardenFlowers].reverse();
+
+            reversedList.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'drawer-item';
+                card.innerHTML = `
+                    <div class="item-date">${item.date || '微光時刻'}</div>
+                    <div class="item-text">${escapeHtml(item.text)}</div>
+                `;
+                card.addEventListener('click', () => {
+                    drawerOverlay.classList.remove('active');
+                    openModal(item.date || '微光時刻', item.text);
+                });
+                drawerList.appendChild(card);
+            });
+        }
+
+        function openModal(date, text) {
+            document.getElementById('modal-date').textContent = date;
+            document.getElementById('modal-content').textContent = text;
+            modalOverlay.classList.add('active');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
